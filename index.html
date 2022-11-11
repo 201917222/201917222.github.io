@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>华北水利水电大学70周年校庆</title>
+        <link rel="stylesheet" href="图片轮播.css"/>
+        <link rel="stylesheet" href="导航栏.css"/>
+</head>
+<body id="name1">
+
+<div>
+    <ul class="list">
+        <li><a href="华北水利水电大学70周年校庆大作业.html">首页</a></li>
+        <li><a href="华水简介.html" target="_blank">学校简介</a></li>
+        <li><a href="华水校友.html">华水校友</a></li>
+        <li><a href="华水校歌.html">华水校歌</a></li>
+        <li><a href="华水航拍.html">华水航拍</a></li>
+        <li><a href="登录.html">登录</a> </li>
+          <img src="logo.jpg" style="float: right"  alt="" width="200" height="40">
+      </ul>
+</div>
+
+
+<div class="box" id="box">
+    <div class="inner">
+        <ul>
+            <li><a href="#"><img src="校庆1.jpg" alt=""></a></li>
+            <li><a href="#"><img src="校庆6.jpg" alt=""></a></li>
+            <li><a href="#"><img src="校庆7.jpg" alt=""></a></li>
+            <li><a href="#"><img src="校庆2.jpg" alt=""></a></li>
+            <li><a href="#"><img src="校庆3.jpg" alt=""></a></li>
+        </ul>
+        <ol class="bar">
+        </ol>
+        <div id="arr">
+              <span id="left"> <</span>
+              <span id="right">></span>
+        </div>
+
+    </div>
+</div>
+<script>
+    /**
+     *
+     * @param id  传入元素的id
+     * @returns {HTMLElement | null}  返回标签对象，方便获取元素
+     */
+    function my$(id) {
+        return document.getElementById(id);
+    }
+
+    var box=my$("box");
+    var inner=box.children[0];
+    var ulObj=inner.children[0];
+    var list=ulObj.children;
+    var olObj=inner.children[1];
+    var arr=my$("arr");
+    var imgWidth=inner.offsetWidth;
+    var right=my$("right");
+    var pic=0;
+
+    for(var i=0;i<list.length;i++){
+        var liObj=document.createElement("li");
+
+        olObj.appendChild(liObj);
+        liObj.innerText=(i+1);
+        liObj.setAttribute("index",i);
+
+        liObj.onmouseover=function () {
+
+            for (var j=0;j<olObj.children.length;j++){
+                olObj.children[j].removeAttribute("class");
+            }
+            this.className="current";
+            pic=this.getAttribute("index");
+            animate(ulObj,-pic*imgWidth);
+        }
+
+    }
+
+    olObj.children[0].className = "current";
+    ulObj.appendChild(ulObj.children[0].cloneNode(true));
+    var timeId=setInterval(onmouseclickHandle,3000);
+    box.onmouseover=function () {
+        arr.style.display="block";
+        clearInterval(timeId);
+    };
+    box.onmouseout=function () {
+        arr.style.display="none";
+        timeId=setInterval(onmouseclickHandle,3000);
+    };
+    right.onclick=onmouseclickHandle;
+    function onmouseclickHandle() {
+        if (pic == list.length - 1) {
+            pic = 0;
+            ulObj.style.left = 0 + "px";
+        }
+        pic++;
+        animate(ulObj, -pic * imgWidth);
+
+        if (pic == list.length - 1) {
+            olObj.children[olObj.children.length - 1].className = "";
+            olObj.children[0].className = "current";
+        } else {
+            for (var i = 0; i < olObj.children.length; i++) {
+                olObj.children[i].removeAttribute("class");
+            }
+            olObj.children[pic].className = "current";
+        }
+    }
+    left.onclick=function () {
+        if (pic==0){
+            pic=list.length-1;
+            ulObj.style.left=-pic*imgWidth+"px";
+        }
+        pic--;
+        animate(ulObj,-pic*imgWidth);
+        for (var i = 0; i < olObj.children.length; i++) {
+            olObj.children[i].removeAttribute("class");
+        }
+        olObj.children[pic].className = "current";
+    };
+
+    function animate(element, target) {
+        clearInterval(element.timeId);
+        element.timeId = setInterval(function () {
+            var current = element.offsetLeft;
+            var step = 10;
+            step = current < target ? step : -step;
+            current += step;
+            if (Math.abs(current - target) > Math.abs(step)) {
+                element.style.left = current + "px";
+            } else {
+                clearInterval(element.timeId);
+                element.style.left = target + "px";
+            }
+        }, 10);
+    }
+</script>
+
+</body>
+</html>
